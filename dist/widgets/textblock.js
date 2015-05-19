@@ -1,14 +1,12 @@
-System.register(['aurelia-framework'], function (_export) {
-  var bindable, Textblock;
+System.register([], function (_export) {
+  var Textblock;
 
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
   return {
-    setters: [function (_aureliaFramework) {
-      bindable = _aureliaFramework.bindable;
-    }],
+    setters: [],
     execute: function () {
       'use strict';
 
@@ -36,4 +34,4 @@ System.register(['aurelia-framework'], function (_export) {
     }
   };
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndpZGdldHMvdGV4dGJsb2NrLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Z0JBRWEsU0FBUzs7Ozs7Ozs7bUNBRmQsUUFBUTs7Ozs7QUFFSCxlQUFTO2lCQUFULFNBQVM7Z0NBQVQsU0FBUzs7ZUFFcEIsSUFBSSxHQUFHLFdBQVc7ZUFDbEIsSUFBSSxHQUFHLFdBQVc7ZUFDbEIsSUFBSSxHQUFHLFNBQVM7ZUFDaEIsSUFBSSxHQUFHLGFBQWE7OztxQkFMVCxTQUFTOztpQkFPWixrQkFBQyxLQUFLLEVBQUU7QUFDZCxnQkFBSSxDQUFDLElBQUksR0FBRyxLQUFLLENBQUM7V0FDbkI7OztlQVRVLFNBQVM7OzsyQkFBVCxTQUFTIiwiZmlsZSI6IndpZGdldHMvdGV4dGJsb2NrLmpzIiwic291cmNlUm9vdCI6Ii4uL3NyYy8ifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndpZGdldHMvdGV4dGJsb2NrLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7TUFBYSxTQUFTOzs7Ozs7Ozs7OztBQUFULGVBQVM7aUJBQVQsU0FBUztnQ0FBVCxTQUFTOztlQUVwQixJQUFJLEdBQUcsV0FBVztlQUNsQixJQUFJLEdBQUcsV0FBVztlQUNsQixJQUFJLEdBQUcsU0FBUztlQUNoQixJQUFJLEdBQUcsYUFBYTs7O3FCQUxULFNBQVM7O2lCQU9aLGtCQUFDLEtBQUssRUFBRTtBQUNkLGdCQUFJLENBQUMsSUFBSSxHQUFHLEtBQUssQ0FBQztXQUNuQjs7O2VBVFUsU0FBUzs7OzJCQUFULFNBQVMiLCJmaWxlIjoid2lkZ2V0cy90ZXh0YmxvY2suanMiLCJzb3VyY2VSb290IjoiLi4vc3JjLyJ9

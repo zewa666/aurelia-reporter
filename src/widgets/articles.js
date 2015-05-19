@@ -17,6 +17,6 @@ export class Articles {
       name: 'Stuff',
       price: 'USD 0.20'
     }
-  ]
+  ];
 }
 

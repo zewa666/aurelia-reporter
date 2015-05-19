@@ -1,6 +1,7 @@
-/* */ 
 System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-templating'], function (_export) {
-  var inject, ObserverLocator, calcSplices, getChangeRecords, BoundViewFactory, ViewSlot, customAttribute, bindable, templateController, _classCallCheck, Repeat;
+  var inject, ObserverLocator, calcSplices, getChangeRecords, BoundViewFactory, ViewSlot, customAttribute, bindable, templateController, Repeat;
+
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
   return {
     setters: [function (_aureliaDependencyInjection) {
@@ -18,8 +19,6 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
     }],
     execute: function () {
       'use strict';
-
-      _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
       Repeat = (function () {
         function Repeat(viewFactory, viewSlot, observerLocator) {
@@ -39,7 +38,7 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
           var _this = this;
 
           var items = this.items,
-              observer;
+            observer;
 
           this.executionContext = executionContext;
 
@@ -96,7 +95,7 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
 
         _Repeat.prototype.processItems = function processItems() {
           var items = this.items,
-              viewSlot = this.viewSlot;
+            viewSlot = this.viewSlot;
 
           if (this.disposeSubscription) {
             this.disposeSubscription();
@@ -122,12 +121,12 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
           var _this2 = this;
 
           var viewFactory = this.viewFactory,
-              viewSlot = this.viewSlot,
-              i,
-              ii,
-              row,
-              view,
-              observer;
+            viewSlot = this.viewSlot,
+            i,
+            ii,
+            row,
+            view,
+            observer;
 
           observer = this.observerLocator.getArrayObserver(items);
 
@@ -146,11 +145,11 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
           var _this3 = this;
 
           var viewFactory = this.viewFactory,
-              viewSlot = this.viewSlot,
-              index = 0,
-              row,
-              view,
-              observer;
+            viewSlot = this.viewSlot,
+            index = 0,
+            row,
+            view,
+            observer;
 
           observer = this.observerLocator.getMapObserver(items);
 
@@ -168,11 +167,11 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
 
         _Repeat.prototype.processNumber = function processNumber(value) {
           var viewFactory = this.viewFactory,
-              viewSlot = this.viewSlot,
-              i,
-              ii,
-              row,
-              view;
+            viewSlot = this.viewSlot,
+            i,
+            ii,
+            row,
+            view;
 
           for (i = 0, ii = Math.floor(value); i < ii; ++i) {
             row = this.createFullExecutionContext(i, i, ii);
@@ -208,8 +207,8 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
 
         _Repeat.prototype.updateExecutionContext = function updateExecutionContext(context, index, length) {
           var first = index === 0,
-              last = index === length - 1,
-              even = index % 2 === 0;
+            last = index === length - 1,
+            even = index % 2 === 0;
 
           context.$index = index;
           context.$first = first;
@@ -223,22 +222,23 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
 
         _Repeat.prototype.handleSplices = function handleSplices(array, splices) {
           var viewLookup = new Map(),
-              viewSlot = this.viewSlot,
-              spliceIndexLow,
-              view,
-              i,
-              ii,
-              j,
-              jj,
-              row,
-              splice,
-              addIndex,
-              end,
-              itemsLeftToAdd,
-              removed,
-              model,
-              children,
-              length;
+            viewSlot = this.viewSlot,
+            spliceIndexLow,
+            viewOrPromise,
+            view,
+            i,
+            ii,
+            j,
+            jj,
+            row,
+            splice,
+            addIndex,
+            end,
+            itemsLeftToAdd,
+            removed,
+            model,
+            children,
+            length;
 
           for (i = 0, ii = splices.length; i < ii; ++i) {
             splice = splices[i];
@@ -256,9 +256,9 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
                 view.executionContext[this.local] = array[addIndex + j];
                 --itemsLeftToAdd;
               } else {
-                view = viewSlot.removeAt(addIndex + splice.addedCount);
-                if (view) {
-                  viewLookup.set(removed[j], view);
+                viewOrPromise = viewSlot.removeAt(addIndex + splice.addedCount);
+                if (viewOrPromise) {
+                  viewLookup.set(removed[j], viewOrPromise);
                 }
               }
             }
@@ -267,10 +267,17 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
 
             for (; 0 < itemsLeftToAdd; ++addIndex) {
               model = array[addIndex];
-              view = viewLookup.get(model);
-              if (view) {
+              viewOrPromise = viewLookup.get(model);
+              if (viewOrPromise instanceof Promise) {
+                (function (localAddIndex, localModel) {
+                  viewOrPromise.then(function (view) {
+                    viewLookup['delete'](localModel);
+                    viewSlot.insert(localAddIndex, view);
+                  });
+                })(addIndex, model);
+              } else if (viewOrPromise) {
                 viewLookup['delete'](model);
-                viewSlot.insert(addIndex, view);
+                viewSlot.insert(addIndex, viewOrPromise);
               } else {
                 row = this.createBaseExecutionContext(model);
                 view = this.viewFactory.create(row);
@@ -292,21 +299,27 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
           }
 
           viewLookup.forEach(function (x) {
-            return x.unbind();
+            if (x instanceof Promise) {
+              x.then(function (y) {
+                return y.unbind();
+              });
+            } else {
+              x.unbind();
+            }
           });
         };
 
         _Repeat.prototype.handleMapChangeRecords = function handleMapChangeRecords(map, records) {
           var viewSlot = this.viewSlot,
-              key,
-              i,
-              ii,
-              view,
-              children,
-              length,
-              row,
-              removeIndex,
-              record;
+            key,
+            i,
+            ii,
+            view,
+            children,
+            length,
+            row,
+            removeIndex,
+            record;
 
           for (i = 0, ii = records.length; i < ii; ++i) {
             record = records[i];
@@ -346,9 +359,9 @@ System.register(['aurelia-dependency-injection', 'aurelia-binding', 'aurelia-tem
 
         _Repeat.prototype.getViewIndexByKey = function getViewIndexByKey(key) {
           var viewSlot = this.viewSlot,
-              i,
-              ii,
-              child;
+            i,
+            ii,
+            child;
 
           for (i = 0, ii = viewSlot.children.length; i < ii; ++i) {
             child = viewSlot.children[i];
