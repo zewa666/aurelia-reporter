@@ -15,7 +15,6 @@ export class Report {
   widgets = [];
 
   removeWidget(widget) {
-    // TODO: x.unbind error repeat.js
     let idx = this.widgets.map( (obj, index) => {
       if( obj.id === widget.id )
         return index;
